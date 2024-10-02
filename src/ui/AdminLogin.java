@@ -8,8 +8,9 @@
  * @author dhana
  */
 package ui;
-import ui.*;
+import java.sql.ResultSet;
 import javax.swing.*;
+
 public class AdminLogin extends javax.swing.JFrame {
 
     /**
@@ -31,15 +32,16 @@ public class AdminLogin extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        lpass = new javax.swing.JTextField();
+        lname = new javax.swing.JTextField();
+        AdminLogin = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        lrole = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBackground(new java.awt.Color(102, 0, 0));
@@ -65,27 +67,27 @@ public class AdminLogin extends javax.swing.JFrame {
         jLabel3.setOpaque(true);
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(456, 297, 139, 28));
 
-        jTextField1.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(685, 298, 350, -1));
+        lpass.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
+        getContentPane().add(lpass, new org.netbeans.lib.awtextra.AbsoluteConstraints(685, 298, 350, -1));
 
-        jTextField2.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        lname.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
+        lname.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                lnameActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(685, 242, 350, -1));
+        getContentPane().add(lname, new org.netbeans.lib.awtextra.AbsoluteConstraints(685, 242, 350, -1));
 
-        jButton1.setBackground(new java.awt.Color(102, 0, 0));
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Login");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        AdminLogin.setBackground(new java.awt.Color(102, 0, 0));
+        AdminLogin.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        AdminLogin.setForeground(new java.awt.Color(255, 255, 255));
+        AdminLogin.setText("Login");
+        AdminLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                AdminLoginActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(779, 455, -1, -1));
+        getContentPane().add(AdminLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 460, -1, -1));
 
         jButton2.setBackground(new java.awt.Color(102, 0, 0));
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -96,7 +98,7 @@ public class AdminLogin extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(541, 455, -1, -1));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 460, -1, -1));
 
         jLabel4.setBackground(new java.awt.Color(102, 0, 0));
         jLabel4.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
@@ -106,9 +108,9 @@ public class AdminLogin extends javax.swing.JFrame {
         jLabel4.setOpaque(true);
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(456, 353, 139, 28));
 
-        jComboBox1.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "User", "Admin" }));
-        getContentPane().add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(685, 354, 350, -1));
+        lrole.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
+        lrole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "User", "Admin" }));
+        getContentPane().add(lrole, new org.netbeans.lib.awtextra.AbsoluteConstraints(685, 354, 350, -1));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/GuestVission.jpg"))); // NOI18N
         jLabel5.setText("jLabel5");
@@ -117,10 +119,40 @@ public class AdminLogin extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void AdminLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AdminLoginActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-
+         if(lname.getText().isEmpty() || lpass.getText().isEmpty()) {      
+        JOptionPane.showMessageDialog(null, "Please fill all fields.");
+        return;
+        }
+       
+            
+            
+         if(evt.getSource()==AdminLogin){
+         
+            String username=lname.getText(); 
+            String password=lpass.getText(); 
+              
+            
+               String query="Select * from signup where name='"+username+"'And password='"+password+"'";
+               
+               try{
+            ConnectionProvider c=new ConnectionProvider();
+  c.s.executeQuery(query);
+                ResultSet rs = c.s.executeQuery(query);
+                if(rs.next()){
+                    this.setVisible(false);
+                    new adminHome().setVisible(true);
+                }else{
+JOptionPane.showMessageDialog(null, "Login Unsuccessfully!");
+                }
+               
+               }catch(Exception e)
+               {    
+                    e.printStackTrace();
+                }
+    }//GEN-LAST:event_AdminLoginActionPerformed
+    }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         signup frame = new signup();
@@ -128,9 +160,9 @@ public class AdminLogin extends javax.swing.JFrame {
         frame.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void lnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_lnameActionPerformed
 
     /**
      * @param args the command line arguments
@@ -170,15 +202,15 @@ public class AdminLogin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton AdminLogin;
     private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField lname;
+    private javax.swing.JTextField lpass;
+    private javax.swing.JComboBox<String> lrole;
     // End of variables declaration//GEN-END:variables
 }

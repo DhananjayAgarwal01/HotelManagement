@@ -1,6 +1,8 @@
 package ui;
-import ui.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.swing.*;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -16,7 +18,7 @@ public class forgotPassword extends javax.swing.JFrame {
     /**
      * Creates new form forgotPassword
      */
-    public forgotPassword() {
+    public forgotPassword() {   
         initComponents();
     }
 
@@ -35,17 +37,17 @@ public class forgotPassword extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        femail = new javax.swing.JTextField();
+        fanswer = new javax.swing.JTextField();
+        newPassword = new javax.swing.JTextField();
+        fsave = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        fquestion = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
@@ -86,71 +88,118 @@ public class forgotPassword extends javax.swing.JFrame {
         jLabel5.setOpaque(true);
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 400, 250, 38));
 
-        jTextField1.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
-        jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 230, 430, 38));
+        femail.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
+        femail.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        getContentPane().add(femail, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 230, 430, 38));
 
-        jTextField2.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
-        jTextField2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        getContentPane().add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 290, 430, 38));
+        fanswer.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
+        fanswer.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        getContentPane().add(fanswer, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 350, 430, 38));
 
-        jTextField3.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
-        jTextField3.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        getContentPane().add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 350, 430, 38));
+        newPassword.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
+        newPassword.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        getContentPane().add(newPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 410, 430, 38));
 
-        jTextField4.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
-        jTextField4.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        getContentPane().add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 410, 430, 38));
-
-        jButton2.setBackground(new java.awt.Color(102, 0, 0));
-        jButton2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("Search");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        fsave.setBackground(new java.awt.Color(102, 0, 0));
+        fsave.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        fsave.setForeground(new java.awt.Color(255, 255, 255));
+        fsave.setText("Save");
+        fsave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                fsaveActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 280, 114, 33));
-
-        jButton3.setBackground(new java.awt.Color(102, 0, 0));
-        jButton3.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("Save");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 530, 179, 33));
+        getContentPane().add(fsave, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 530, 179, 33));
 
         jButton4.setBackground(new java.awt.Color(102, 0, 0));
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jButton4.setForeground(new java.awt.Color(255, 255, 255));
         jButton4.setText("Signup");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 530, 179, 33));
 
         jButton5.setBackground(new java.awt.Color(102, 0, 0));
         jButton5.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jButton5.setForeground(new java.awt.Color(255, 255, 255));
         jButton5.setText("Login");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 530, 179, 33));
 
-        jLabel6.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
+        fquestion.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
+        fquestion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "What is the name of your first pet?", "Which elementary school did you attend?", "Which is your favourite colour?", "What is name of the town where you were born?" }));
+        fquestion.setName("jComboBox"); // NOI18N
+        fquestion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fquestionActionPerformed(evt);
+            }
+        });
+        getContentPane().add(fquestion, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 290, 430, 38));
+
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/GuestVission.jpg"))); // NOI18N
         jLabel6.setText("jLabel6");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(-230, -30, -1, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(-210, -40, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void fsaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fsaveActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+        if(evt.getSource()==fsave){
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+            String email=femail.getText();
+            String quest=(String)fquestion.getSelectedItem();
+            String ans=fanswer.getText();
+            String pass=newPassword.getText();
+            String query = "update signup set password=? where email=? and security_question=? and answer=?";
+try {
+    ConnectionProvider c = new ConnectionProvider();
+    
+    // Prepare the update statement
+    PreparedStatement ps = c.c.prepareStatement(query); 
+    ps.setString(1, pass);  // Set new password
+    ps.setString(2, email);        // Set email
+    ps.setString(3, quest);        // Set security question
+    ps.setString(4, ans);          // Set answer
+    
+    int rowsAffected = ps.executeUpdate();  // Execute the update
+    
+    if (rowsAffected > 0) {
+        JOptionPane.showMessageDialog(null, "Password Updated Successfully!");
+    } else {
+        JOptionPane.showMessageDialog(null, "Data Not Found! Cannot change password.");
+    }
+    
+} catch (Exception e) {
+    e.printStackTrace();
+}
+        }
+    }//GEN-LAST:event_fsaveActionPerformed
+
+    private void fquestionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fquestionActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_fquestionActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        signup frame = new signup();
+                frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+                frame.setVisible(true);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        AdminLogin frame = new AdminLogin();
+                frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+                frame.setVisible(true);
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -190,9 +239,11 @@ public class forgotPassword extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField fanswer;
+    private javax.swing.JTextField femail;
+    private javax.swing.JComboBox<String> fquestion;
+    private javax.swing.JButton fsave;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
@@ -201,9 +252,6 @@ public class forgotPassword extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField newPassword;
     // End of variables declaration//GEN-END:variables
 }

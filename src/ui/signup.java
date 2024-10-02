@@ -1,5 +1,3 @@
-package ui;
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -9,7 +7,8 @@ package ui;
  *
  * @author dhana
  */
-import ui.*;
+
+package ui;
 import javax.swing.*;
 public class signup extends javax.swing.JFrame {
 
@@ -35,16 +34,17 @@ public class signup extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jTextField3 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        sname = new javax.swing.JTextField();
+        semail = new javax.swing.JTextField();
+        spass = new javax.swing.JPasswordField();
+        security_question = new javax.swing.JComboBox<>();
+        ans = new javax.swing.JTextField();
+        signup = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
@@ -92,32 +92,38 @@ public class signup extends javax.swing.JFrame {
         jLabel6.setOpaque(true);
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 450, 200, 30));
 
-        jTextField1.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 250, 380, 30));
+        sname.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
+        getContentPane().add(sname, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 250, 380, 30));
 
-        jTextField2.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
-        getContentPane().add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 300, 380, 30));
+        semail.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
+        getContentPane().add(semail, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 300, 380, 30));
 
-        jPasswordField1.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
-        getContentPane().add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 350, 380, 30));
+        spass.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
+        getContentPane().add(spass, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 350, 380, 30));
 
-        jComboBox1.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "What is the name of your first pet?", "Which elementary school did you attend?", "Which is your favourite colour?", "What is name of the town where you were born?" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        security_question.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
+        security_question.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "What is the name of your first pet?", "Which elementary school did you attend?", "Which is your favourite colour?", "What is name of the town where you were born?" }));
+        security_question.setName("jComboBox"); // NOI18N
+        security_question.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                security_questionActionPerformed(evt);
             }
         });
-        getContentPane().add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 400, 380, 30));
+        getContentPane().add(security_question, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 400, 380, 30));
 
-        jTextField3.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
-        getContentPane().add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 450, 380, 30));
+        ans.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
+        getContentPane().add(ans, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 450, 380, 30));
 
-        jButton1.setBackground(new java.awt.Color(105, 0, 0));
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Signup");
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 550, -1, 30));
+        signup.setBackground(new java.awt.Color(105, 0, 0));
+        signup.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        signup.setForeground(new java.awt.Color(255, 255, 255));
+        signup.setText("Signup");
+        signup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                signupActionPerformed(evt);
+            }
+        });
+        getContentPane().add(signup, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 550, -1, 30));
 
         jButton2.setBackground(new java.awt.Color(105, 0, 0));
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -132,20 +138,49 @@ public class signup extends javax.swing.JFrame {
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/GuestVission.jpg"))); // NOI18N
         jLabel7.setText("jLabel7");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(-30, -70, -1, -1));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        new AdminLogin().setExtendedState(new AdminLogin().getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        new AdminLogin().setVisible(true);
+//        new AdminLogin().setExtendedState(new AdminLogin().getExtendedState() | JFrame.MAXIMIZED_BOTH);
+//        new AdminLogin().setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void security_questionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_security_questionActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_security_questionActionPerformed
+
+    private void signupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signupActionPerformed
+        // TODO add your handling code here:
+        if(sname.getText().isEmpty() || spass.getText().isEmpty() || semail.getText().isEmpty() || ans.getText().isEmpty()) {      
+        JOptionPane.showMessageDialog(null, "Please fill all fields.");
+        return;
+        }
+       
+            
+            
+         if(evt.getSource()==signup){
+           String name=sname.getText();
+            String password=new String(spass.getPassword()); 
+             String email=semail.getText();
+              String securityquestion=(String)security_question.getSelectedItem();
+              String answer=ans.getText();
+            
+               String query="insert into signup values('"+name+"','"+email+"','"+password+"','"+securityquestion+"','"+answer+"')";
+               try{
+            ConnectionProvider c=new ConnectionProvider();
+c.s.executeUpdate(query);
+JOptionPane.showMessageDialog(null, "Signup Successfully!");
+        new AdminLogin().setVisible(true);
+               }catch(Exception e)
+               {    
+                    e.printStackTrace();
+               }
+}
+    }//GEN-LAST:event_signupActionPerformed
 
     /**
      * @param args the command line arguments
@@ -186,9 +221,8 @@ public class signup extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JTextField ans;
     private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -196,9 +230,10 @@ public class signup extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JComboBox<String> security_question;
+    private javax.swing.JTextField semail;
+    private javax.swing.JButton signup;
+    private javax.swing.JTextField sname;
+    private javax.swing.JPasswordField spass;
     // End of variables declaration//GEN-END:variables
 }
