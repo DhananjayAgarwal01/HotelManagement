@@ -168,7 +168,7 @@ public class CustomerDetailsBill extends javax.swing.JFrame {
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // TODO add your handling code here:
-        String query = "select * from customer where checkout is null";
+        String query = "select * from customer";
         DefaultTableModel model = (DefaultTableModel)jTable2.getModel();
         model.setRowCount(0);
         try {
@@ -188,7 +188,7 @@ public class CustomerDetailsBill extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         String date=coutdate.getText();
-        String query = "select * from customer where checkout is null and checkOUT is '"+date+"'";
+        String query = "select * from customer where checkOUT is '"+date+"'";
         DefaultTableModel model = (DefaultTableModel)jTable2.getModel();
         model.setRowCount(0);
         try {
@@ -217,7 +217,7 @@ public class CustomerDetailsBill extends javax.swing.JFrame {
         ConnectionProvider c = new ConnectionProvider();
         
         // Query to find customer by room number
-        String query = "SELECT * FROM customer WHERE id ='" + id + "' AND checkout IS NULL";
+        String query = "SELECT * FROM customer WHERE id ='" + id + "'";
         ResultSet rs = c.s.executeQuery(query);
         String name=rs.getString("2");
         String roomno=rs.getString("12");

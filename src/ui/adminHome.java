@@ -2,8 +2,10 @@ package ui;
 import javax.swing.*;
 import java.awt.GraphicsDevice;  
 import java.awt.GraphicsEnvironment;  
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -251,7 +253,7 @@ try {
                 ResultSet rs = c.s.executeQuery(query);
     
     while (rs.next()) {
-        model.addRow(new Object[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5)});
+        model.addRow(new Object[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7)});
     }
     
 } catch (Exception e) {
@@ -273,6 +275,29 @@ try {
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
+        int index=jTable1.getSelectedRow();
+        TableModel model=jTable1.getModel();
+        String email=model.getValueAt (index, 1).toString();
+        String status=model.getValueAt(index, 4).toString();
+        try
+        {
+        int a=JOptionPane.showConfirmDialog(null, "Do you want to cancel reservation of "+email+"","Select",JOptionPane.YES_NO_OPTION);
+        if(a==0){
+            ConnectionProvider c = new ConnectionProvider();
+            String query="update customer set status= 'Cancelled' where email='"+email+"'";
+            String query2="update signup set status= 'Cancelled' where email='"+email+"'";
+            c.s.executeUpdate(query);
+            c.s.executeUpdate(query2);
+    // Prepare the update statement
+        JOptionPane.showMessageDialog(null, "Status Changed Successfully!");
+        setVisible(false);
+        new adminHome().setVisible(true);
+        }
+        }
+        catch (Exception e)
+        {
+        JOptionPane.showMessageDialog(null, e);
+        }
     }//GEN-LAST:event_jTable1MouseClicked
 
     /**

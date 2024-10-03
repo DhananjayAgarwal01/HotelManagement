@@ -176,9 +176,11 @@ public class signup extends javax.swing.JFrame {
         String email = semail.getText();
         String securityquestion = (String) security_question.getSelectedItem();
         String answer = ans.getText();
+        String roomdefault = "0";
+        String stay= "Booked";
 
         // Using PreparedStatement to avoid SQL injection
-        String query = "INSERT INTO signup (name, email, password, security_question, answer) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO signup (name, email, password, security_question, answer, room, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try {
             ConnectionProvider c = new ConnectionProvider();
@@ -188,6 +190,8 @@ public class signup extends javax.swing.JFrame {
             ps.setString(3, password);
             ps.setString(4, securityquestion);
             ps.setString(5, answer);
+            ps.setString(6, roomdefault);
+            ps.setString(7, stay);
             
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {

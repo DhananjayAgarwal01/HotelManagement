@@ -328,10 +328,14 @@ try {
     
     // Update room status to 'Booked'
     if(!price.equals("")) {
-        Query = "UPDATE rooms SET status='Booked' WHERE roomno=?";
+        Query = "UPDATE rooms SET status='Checked-IN' WHERE roomno=?";
         PreparedStatement ps1 = c.c.prepareStatement(Query);
         ps1.setString(1, roomNo); // Set room number in the query
         int rowsAffected = ps1.executeUpdate();
+        Query = "UPDATE rooms SET status='Checked-IN and roomno=? where name='"+name+"'";
+        PreparedStatement psx = c.c.prepareStatement(Query);
+        psx.setString(6, roomNo); // Set room number in the query
+        int rowsAffectedx = psx.executeUpdate();
         
         // Insert customer data into the customer table
         Query = "INSERT INTO customer (id, name, mobile, nationality, gender, email, ID_Proof, address, checkin, roomno, bed, roomtype, price, status) "

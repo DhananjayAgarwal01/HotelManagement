@@ -365,9 +365,12 @@ public class CustomerCheckOut extends javax.swing.JFrame {
             // Update query
             String updateQuery = "UPDATE customer SET numberofdays =" + numdays +
                                  ", totalAmount = '" + total + 
+                                 ", Status = 'Checked-Out'" + 
                                  "', checkOut = '" + CheckOut +
                                  "' WHERE id = '" + id + "'";
+            String updateQuery2 = "UPDATE signup SET status='Checked-Out' where name='"+name+"'";
             c.s.executeUpdate(updateQuery);
+            c.s.executeUpdate(updateQuery2);
             
             // Update room status
             String roomUpdateQuery = "UPDATE rooms SET Status = 'Available' WHERE roomno = '" + roomno + "'";
