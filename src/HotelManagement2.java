@@ -8,14 +8,14 @@
  *
  * @author dhana
  */
-import ui.home;
+import ui.AdminLogin;
 public class HotelManagement2 {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        new ui.home().setVisible(true);
+        new ui.AdminLogin().setVisible(true);
     }
     
 }

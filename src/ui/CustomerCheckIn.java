@@ -1,9 +1,12 @@
 package ui;
-
+import java.sql.ResultSet;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+import java.sql.PreparedStatement;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import javax.swing.*;
 /**
  *
@@ -16,6 +19,14 @@ public class CustomerCheckIn extends javax.swing.JFrame {
      */
     public CustomerCheckIn() {
         initComponents();
+JTextField cprice = new JTextField();
+cprice.setEditable(false);
+SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
+    Calendar cal = Calendar.getInstance();
+    
+    // Set the current date to the 'cindate' field
+    cindate.setText(myFormat.format(cal.getTime()));
+    cindate.setEditable(false); // Make the date field non-editable
     }
 
     /**
@@ -28,31 +39,31 @@ public class CustomerCheckIn extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        cname = new javax.swing.JTextField();
+        cno = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        cnat = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        cemail = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cgender = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        cid = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
+        cindate = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        croom = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        jComboBox4 = new javax.swing.JComboBox<>();
+        cbed = new javax.swing.JComboBox<>();
         jLabel12 = new javax.swing.JLabel();
-        jTextField9 = new javax.swing.JTextField();
-        jTextField10 = new javax.swing.JTextField();
+        croomno = new javax.swing.JTextField();
+        caddress = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jTextField11 = new javax.swing.JTextField();
+        allot = new javax.swing.JButton();
+        cprice = new javax.swing.JTextField();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
@@ -69,11 +80,11 @@ public class CustomerCheckIn extends javax.swing.JFrame {
         jLabel1.setOpaque(true);
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 190, 150, -1));
 
-        jTextField1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 220, 300, -1));
+        cname.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        getContentPane().add(cname, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 220, 300, -1));
 
-        jTextField2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        getContentPane().add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 300, 300, -1));
+        cno.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        getContentPane().add(cno, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 300, 300, -1));
 
         jLabel2.setBackground(new java.awt.Color(105, 0, 0));
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -82,8 +93,8 @@ public class CustomerCheckIn extends javax.swing.JFrame {
         jLabel2.setOpaque(true);
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 270, 150, -1));
 
-        jTextField3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        getContentPane().add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 380, 300, -1));
+        cnat.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        getContentPane().add(cnat, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 380, 300, -1));
 
         jLabel3.setBackground(new java.awt.Color(105, 0, 0));
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -99,13 +110,13 @@ public class CustomerCheckIn extends javax.swing.JFrame {
         jLabel4.setOpaque(true);
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 420, 150, -1));
 
-        jTextField5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+        cemail.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        cemail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField5ActionPerformed(evt);
+                cemailActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 530, 300, -1));
+        getContentPane().add(cemail, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 530, 300, -1));
 
         jLabel5.setBackground(new java.awt.Color(105, 0, 0));
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -114,14 +125,14 @@ public class CustomerCheckIn extends javax.swing.JFrame {
         jLabel5.setOpaque(true);
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 500, 150, -1));
 
-        jComboBox1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Male", "Female", "Others" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        cgender.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        cgender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Male", "Female", "Others" }));
+        cgender.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                cgenderActionPerformed(evt);
             }
         });
-        getContentPane().add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 450, 300, -1));
+        getContentPane().add(cgender, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 450, 300, -1));
 
         jLabel6.setBackground(new java.awt.Color(105, 0, 0));
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -130,8 +141,8 @@ public class CustomerCheckIn extends javax.swing.JFrame {
         jLabel6.setOpaque(true);
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 190, 150, -1));
 
-        jTextField4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        getContentPane().add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 220, 300, -1));
+        cid.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        getContentPane().add(cid, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 220, 300, -1));
 
         jLabel7.setBackground(new java.awt.Color(105, 0, 0));
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -147,8 +158,8 @@ public class CustomerCheckIn extends javax.swing.JFrame {
         jLabel8.setOpaque(true);
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 340, 150, -1));
 
-        jTextField7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        getContentPane().add(jTextField7, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 380, 300, -1));
+        cindate.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        getContentPane().add(cindate, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 380, 300, -1));
 
         jLabel9.setBackground(new java.awt.Color(105, 0, 0));
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -157,14 +168,14 @@ public class CustomerCheckIn extends javax.swing.JFrame {
         jLabel9.setOpaque(true);
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 180, 150, -1));
 
-        jComboBox2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Non-AC", "AC" }));
-        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+        croom.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        croom.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Deluxe", "Super Deluxe", "VIP" }));
+        croom.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox2ActionPerformed(evt);
+                croomActionPerformed(evt);
             }
         });
-        getContentPane().add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 300, 300, -1));
+        getContentPane().add(croom, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 300, 300, -1));
 
         jLabel10.setBackground(new java.awt.Color(105, 0, 0));
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -180,14 +191,14 @@ public class CustomerCheckIn extends javax.swing.JFrame {
         jLabel11.setOpaque(true);
         getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 340, 150, -1));
 
-        jComboBox4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Single", "Double", "Triple" }));
-        jComboBox4.addActionListener(new java.awt.event.ActionListener() {
+        cbed.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        cbed.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Single", "Double", "Triple" }));
+        cbed.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox4ActionPerformed(evt);
+                cbedActionPerformed(evt);
             }
         });
-        getContentPane().add(jComboBox4, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 220, 300, -1));
+        getContentPane().add(cbed, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 220, 300, -1));
 
         jLabel12.setBackground(new java.awt.Color(105, 0, 0));
         jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -196,11 +207,11 @@ public class CustomerCheckIn extends javax.swing.JFrame {
         jLabel12.setOpaque(true);
         getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 420, 150, -1));
 
-        jTextField9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        getContentPane().add(jTextField9, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 380, 300, -1));
+        croomno.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        getContentPane().add(croomno, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 380, 300, -1));
 
-        jTextField10.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        getContentPane().add(jTextField10, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 300, 300, -1));
+        caddress.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        getContentPane().add(caddress, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 300, 300, -1));
 
         jButton3.setBackground(new java.awt.Color(204, 0, 0));
         jButton3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -213,14 +224,19 @@ public class CustomerCheckIn extends javax.swing.JFrame {
         });
         getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1043, 543, -1, -1));
 
-        jButton4.setBackground(new java.awt.Color(204, 0, 0));
-        jButton4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton4.setForeground(new java.awt.Color(255, 255, 0));
-        jButton4.setText("Allot Room");
-        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1043, 503, -1, -1));
+        allot.setBackground(new java.awt.Color(204, 0, 0));
+        allot.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        allot.setForeground(new java.awt.Color(255, 255, 0));
+        allot.setText("Allot Room");
+        allot.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                allotActionPerformed(evt);
+            }
+        });
+        getContentPane().add(allot, new org.netbeans.lib.awtextra.AbsoluteConstraints(1043, 503, -1, -1));
 
-        jTextField11.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        getContentPane().add(jTextField11, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 450, 300, -1));
+        cprice.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        getContentPane().add(cprice, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 450, 300, -1));
 
         jButton5.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
         jButton5.setForeground(new java.awt.Color(153, 0, 0));
@@ -250,21 +266,21 @@ public class CustomerCheckIn extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+    private void cemailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cemailActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5ActionPerformed
+    }//GEN-LAST:event_cemailActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void cgenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cgenderActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_cgenderActionPerformed
 
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+    private void croomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_croomActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox2ActionPerformed
+    }//GEN-LAST:event_croomActionPerformed
 
-    private void jComboBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox4ActionPerformed
+    private void cbedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbedActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox4ActionPerformed
+    }//GEN-LAST:event_cbedActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
@@ -280,8 +296,75 @@ public class CustomerCheckIn extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
-        setVisible(false);
+        int a = JOptionPane.showConfirmDialog(null, "Do you really want to Exit?", "Select", JOptionPane.YES_NO_OPTION);
+        if (a == 0) {
+            setVisible(false);
+        }   
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void allotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allotActionPerformed
+        // TODO add your handling code here:
+        String name = cname.getText();
+String mob = cno.getText();
+String nat = cnat.getText();
+String gender = (String)cgender.getSelectedItem();
+String email = cemail.getText();
+String idProof = cid.getText();
+String Address = caddress.getText();
+String checkIN = cindate.getText();
+String bed = (String)cbed.getSelectedItem();
+String roomType = (String)croom.getSelectedItem();
+String roomNo = croomno.getText();
+String price = cprice.getText();
+String Query = "Select max(id) from customer";
+
+try {
+    ConnectionProvider c = new ConnectionProvider();
+    ResultSet rs = c.s.executeQuery(Query);
+    int id = 1; // Default id in case the table is empty
+    if(rs.next()) {
+        id = rs.getInt(1) + 1; // Increment the max id
+    }
+    
+    // Update room status to 'Booked'
+    if(!price.equals("")) {
+        Query = "UPDATE rooms SET status='Booked' WHERE roomno=?";
+        PreparedStatement ps1 = c.c.prepareStatement(Query);
+        ps1.setString(1, roomNo); // Set room number in the query
+        int rowsAffected = ps1.executeUpdate();
+        
+        // Insert customer data into the customer table
+        Query = "INSERT INTO customer (id, name, mobile, nationality, gender, email, ID_Proof, address, checkin, roomno, bed, roomtype, price, status) "
+              + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        PreparedStatement ps2 = c.c.prepareStatement(Query);
+        ps2.setInt(1, id); // Set id
+        ps2.setString(2, name);
+        ps2.setString(3, mob);
+        ps2.setString(4, nat);
+        ps2.setString(5, gender);
+        ps2.setString(6, email);
+        ps2.setString(7, idProof);
+        ps2.setString(8, Address);
+        ps2.setString(9, checkIN);
+        ps2.setString(10, roomNo);
+        ps2.setString(11, bed);
+        ps2.setString(12, roomType);
+        ps2.setString(13, price);
+        ps2.setString(14, "Staying");
+        
+        int rowsInserted = ps2.executeUpdate();
+        
+        if(rowsInserted > 0) {
+            JOptionPane.showMessageDialog(null, "Customer details inserted successfully!");
+            setVisible(false);
+            new CustomerCheckIn().setVisible(true); 
+        }
+    }
+} catch(Exception e) {
+    JOptionPane.showMessageDialog(null, e);
+}
+
+    }//GEN-LAST:event_allotActionPerformed
 
     /**
      * @param args the command line arguments
@@ -321,13 +404,22 @@ public class CustomerCheckIn extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton allot;
+    private javax.swing.JTextField caddress;
+    private javax.swing.JComboBox<String> cbed;
+    private javax.swing.JTextField cemail;
+    private javax.swing.JComboBox<String> cgender;
+    private javax.swing.JTextField cid;
+    private javax.swing.JTextField cindate;
+    private javax.swing.JTextField cname;
+    private javax.swing.JTextField cnat;
+    private javax.swing.JTextField cno;
+    private javax.swing.JTextField cprice;
+    private javax.swing.JComboBox<String> croom;
+    private javax.swing.JTextField croomno;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -341,14 +433,5 @@ public class CustomerCheckIn extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
 }

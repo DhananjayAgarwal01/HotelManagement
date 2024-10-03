@@ -1,5 +1,7 @@
 package ui;
+import java.sql.ResultSet;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -33,18 +35,23 @@ public class manage_room extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
+        rprice = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextField8 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jButton3 = new javax.swing.JButton();
+        rno = new javax.swing.JTextField();
+        rbed = new javax.swing.JComboBox<>();
+        rtype = new javax.swing.JComboBox<>();
+        radd = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocation(new java.awt.Point(0, 118));
         setUndecorated(true);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jButton2.setFont(new java.awt.Font("Algerian", 1, 18)); // NOI18N
@@ -104,14 +111,14 @@ public class manage_room extends javax.swing.JFrame {
         jLabel5.setOpaque(true);
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 450, 110, -1));
 
-        jTextField6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jTextField6.setAlignmentY(1.0F);
-        jTextField6.addActionListener(new java.awt.event.ActionListener() {
+        rprice.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        rprice.setAlignmentY(1.0F);
+        rprice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField6ActionPerformed(evt);
+                rpriceActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 480, 350, -1));
+        getContentPane().add(rprice, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 480, 350, -1));
 
         jLabel7.setBackground(new java.awt.Color(105, 0, 0));
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -121,30 +128,30 @@ public class manage_room extends javax.swing.JFrame {
         jLabel7.setOpaque(true);
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 180, 110, -1));
 
-        jTextField8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jTextField8.setAlignmentY(1.0F);
-        getContentPane().add(jTextField8, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 210, 350, -1));
+        rno.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        rno.setAlignmentY(1.0F);
+        getContentPane().add(rno, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 210, 350, -1));
 
-        jComboBox1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Single", "Double", "Triple" }));
-        jComboBox1.setAlignmentY(1.0F);
-        getContentPane().add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 390, 350, -1));
+        rbed.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        rbed.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Single", "Double", "Triple" }));
+        rbed.setAlignmentY(1.0F);
+        getContentPane().add(rbed, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 390, 350, -1));
 
-        jComboBox2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AC", "Non-AC" }));
-        jComboBox2.setAlignmentY(1.0F);
-        getContentPane().add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 300, 350, -1));
+        rtype.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        rtype.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Deluxe", "Super Deluxe", "VIP" }));
+        rtype.setAlignmentY(1.0F);
+        getContentPane().add(rtype, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 300, 350, -1));
 
-        jButton3.setBackground(new java.awt.Color(204, 0, 0));
-        jButton3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("Add Room");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        radd.setBackground(new java.awt.Color(204, 0, 0));
+        radd.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        radd.setForeground(new java.awt.Color(255, 255, 255));
+        radd.setText("Add Room");
+        radd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                raddActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 540, -1, -1));
+        getContentPane().add(radd, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 540, -1, -1));
 
         jButton4.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
         jButton4.setForeground(new java.awt.Color(153, 0, 0));
@@ -159,23 +166,52 @@ public class manage_room extends javax.swing.JFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/bggg.jpg"))); // NOI18N
         jLabel1.setText("jLabel1");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 2050));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-20, -20, -1, 2050));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        setVisible(false);
+        int a = JOptionPane.showConfirmDialog(null, "Do you really want to Exit?", "Select", JOptionPane.YES_NO_OPTION);
+        if (a == 0) {
+            setVisible(false);
+        }   
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
+    private void rpriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rpriceActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField6ActionPerformed
+    }//GEN-LAST:event_rpriceActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void raddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_raddActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+        if(rno.getText().isEmpty() || rprice.getText().isEmpty()) {      
+        JOptionPane.showMessageDialog(null, "Please fill all fields.");
+        return;
+        }
+       
+            
+            
+         if(evt.getSource()==radd){
+           String no=rno.getText();
+            String type=(String)rtype.getSelectedItem();
+              String bed=(String)rbed.getSelectedItem();
+              String price=rprice.getText();
+              String status="Available";
+            
+               String query="insert into rooms values('"+no+"','"+type+"','"+bed+"','"+price+"','"+status+"')";
+               try{
+            ConnectionProvider c=new ConnectionProvider();
+c.s.executeUpdate(query);
+JOptionPane.showMessageDialog(null, "Room Added Successfully!");
+setVisible(false);
+new manage_room().setVisible(true);
+               }catch(Exception e)
+               {    
+                    e.printStackTrace();
+               }
+}
+    }//GEN-LAST:event_raddActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
@@ -183,6 +219,25 @@ public class manage_room extends javax.swing.JFrame {
         new manage_room().setVisible(true);
         new manage_room().setExtendedState(new manage_room().getExtendedState() | JFrame.MAXIMIZED_BOTH);
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        // TODO add your handling code here:
+                String query = "select * from rooms";
+            DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
+            model.setRowCount(0);
+try {
+    ConnectionProvider c = new ConnectionProvider();
+    c.s.executeQuery(query);
+    ResultSet rs = c.s.executeQuery(query);
+    
+    while (rs.next()) {
+        model.addRow(new Object[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5)});
+    }
+    
+} catch (Exception e) {
+    e.printStackTrace();
+}
+    }//GEN-LAST:event_formComponentShown
 
     /**
      * @param args the command line arguments
@@ -224,10 +279,7 @@ public class manage_room extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -235,7 +287,10 @@ public class manage_room extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField8;
+    private javax.swing.JButton radd;
+    private javax.swing.JComboBox<String> rbed;
+    private javax.swing.JTextField rno;
+    private javax.swing.JTextField rprice;
+    private javax.swing.JComboBox<String> rtype;
     // End of variables declaration//GEN-END:variables
 }

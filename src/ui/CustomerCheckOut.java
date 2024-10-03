@@ -1,5 +1,21 @@
 package ui;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileOutputStream;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -29,24 +45,24 @@ public class CustomerCheckOut extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        croom = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        cname = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        cdate = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        coutdate = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        cno = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
+        cmail = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
+        camount = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        jTextField8 = new javax.swing.JTextField();
+        cdays = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        jTextField9 = new javax.swing.JTextField();
+        cprice = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -57,12 +73,17 @@ public class CustomerCheckOut extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocation(new java.awt.Point(0, 118));
         setUndecorated(true);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(204, 0, 0));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/Customer Check Out.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/Customer Check Out.png"))); // NOI18N
         jLabel1.setText("Customer Checkout");
         jLabel1.setOpaque(true);
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 6, 214, -1));
@@ -75,18 +96,23 @@ public class CustomerCheckOut extends javax.swing.JFrame {
         jLabel2.setOpaque(true);
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 120, -1, -1));
 
-        jTextField1.setFont(new java.awt.Font("Segoe UI Semibold", 1, 14)); // NOI18N
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        croom.setFont(new java.awt.Font("Segoe UI Semibold", 1, 14)); // NOI18N
+        croom.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                croomActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 120, 200, -1));
+        getContentPane().add(croom, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 120, 200, -1));
 
         jButton2.setBackground(new java.awt.Color(204, 0, 0));
         jButton2.setFont(new java.awt.Font("Segoe UI Semibold", 1, 14)); // NOI18N
         jButton2.setForeground(new java.awt.Color(255, 255, 0));
         jButton2.setText("Search");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 120, -1, -1));
 
         jLabel3.setBackground(new java.awt.Color(105, 0, 0));
@@ -97,13 +123,13 @@ public class CustomerCheckOut extends javax.swing.JFrame {
         jLabel3.setOpaque(true);
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(141, 188, 200, -1));
 
-        jTextField2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        cname.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        cname.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                cnameActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(141, 220, 200, -1));
+        getContentPane().add(cname, new org.netbeans.lib.awtextra.AbsoluteConstraints(141, 220, 200, -1));
 
         jLabel4.setBackground(new java.awt.Color(105, 0, 0));
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -113,13 +139,13 @@ public class CustomerCheckOut extends javax.swing.JFrame {
         jLabel4.setOpaque(true);
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(441, 188, 200, -1));
 
-        jTextField3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+        cdate.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        cdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
+                cdateActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(441, 220, 200, -1));
+        getContentPane().add(cdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(441, 220, 200, -1));
 
         jLabel5.setBackground(new java.awt.Color(105, 0, 0));
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -129,13 +155,13 @@ public class CustomerCheckOut extends javax.swing.JFrame {
         jLabel5.setOpaque(true);
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(741, 188, 200, -1));
 
-        jTextField4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+        coutdate.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        coutdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
+                coutdateActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(741, 214, 200, -1));
+        getContentPane().add(coutdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(741, 214, 200, -1));
 
         jLabel6.setBackground(new java.awt.Color(105, 0, 0));
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -145,13 +171,13 @@ public class CustomerCheckOut extends javax.swing.JFrame {
         jLabel6.setOpaque(true);
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1041, 188, 200, -1));
 
-        jTextField5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+        cno.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        cno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField5ActionPerformed(evt);
+                cnoActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(1041, 220, 200, -1));
+        getContentPane().add(cno, new org.netbeans.lib.awtextra.AbsoluteConstraints(1041, 220, 200, -1));
 
         jLabel7.setBackground(new java.awt.Color(105, 0, 0));
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -161,29 +187,29 @@ public class CustomerCheckOut extends javax.swing.JFrame {
         jLabel7.setOpaque(true);
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(1041, 276, 200, -1));
 
-        jTextField6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jTextField6.addActionListener(new java.awt.event.ActionListener() {
+        cmail.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        cmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField6ActionPerformed(evt);
+                cmailActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1041, 308, 200, -1));
+        getContentPane().add(cmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(1041, 308, 200, -1));
 
         jLabel8.setBackground(new java.awt.Color(105, 0, 0));
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText("Total Amount to collect from Customer");
+        jLabel8.setText("Total Amount to collect");
         jLabel8.setOpaque(true);
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(741, 276, 216, -1));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(741, 276, 200, -1));
 
-        jTextField7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jTextField7.addActionListener(new java.awt.event.ActionListener() {
+        camount.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        camount.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField7ActionPerformed(evt);
+                camountActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField7, new org.netbeans.lib.awtextra.AbsoluteConstraints(741, 308, 200, -1));
+        getContentPane().add(camount, new org.netbeans.lib.awtextra.AbsoluteConstraints(741, 308, 200, -1));
 
         jLabel9.setBackground(new java.awt.Color(105, 0, 0));
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -193,13 +219,13 @@ public class CustomerCheckOut extends javax.swing.JFrame {
         jLabel9.setOpaque(true);
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(441, 276, 200, -1));
 
-        jTextField8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jTextField8.addActionListener(new java.awt.event.ActionListener() {
+        cdays.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        cdays.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField8ActionPerformed(evt);
+                cdaysActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField8, new org.netbeans.lib.awtextra.AbsoluteConstraints(441, 308, 200, -1));
+        getContentPane().add(cdays, new org.netbeans.lib.awtextra.AbsoluteConstraints(441, 308, 200, -1));
 
         jLabel10.setBackground(new java.awt.Color(105, 0, 0));
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -209,13 +235,13 @@ public class CustomerCheckOut extends javax.swing.JFrame {
         jLabel10.setOpaque(true);
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(141, 276, 200, -1));
 
-        jTextField9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jTextField9.addActionListener(new java.awt.event.ActionListener() {
+        cprice.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        cprice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField9ActionPerformed(evt);
+                cpriceActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField9, new org.netbeans.lib.awtextra.AbsoluteConstraints(141, 308, 200, -1));
+        getContentPane().add(cprice, new org.netbeans.lib.awtextra.AbsoluteConstraints(141, 308, 200, -1));
 
         jButton3.setBackground(new java.awt.Color(204, 0, 0));
         jButton3.setFont(new java.awt.Font("Segoe UI Semibold", 1, 14)); // NOI18N
@@ -248,7 +274,7 @@ public class CustomerCheckOut extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Name", "Mobile-Number", "Nationality", "Gender", "Email", "ID-Proof", "Address", "Check-In Date", "Room-Number", "Bed", "Room Type", "Price Per Day"
+                "ID", "Name", "Mobile-Number", "Nationality", "Gender", "Email", "ID-Proof", "Address", "Check-In Date", "Bed", "Room Type", "Room-Number", "Price Per Day"
             }
         ));
         jScrollPane2.setViewportView(jTable2);
@@ -267,46 +293,46 @@ public class CustomerCheckOut extends javax.swing.JFrame {
 
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/bggg.jpg"))); // NOI18N
         jLabel11.setText("jLabel11");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(-30, 0, -1, -1));
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(-20, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void croomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_croomActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_croomActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void cnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cnameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_cnameActionPerformed
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+    private void cdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cdateActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+    }//GEN-LAST:event_cdateActionPerformed
 
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+    private void coutdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_coutdateActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
+    }//GEN-LAST:event_coutdateActionPerformed
 
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+    private void cnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cnoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5ActionPerformed
+    }//GEN-LAST:event_cnoActionPerformed
 
-    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
+    private void cmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmailActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField6ActionPerformed
+    }//GEN-LAST:event_cmailActionPerformed
 
-    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
+    private void camountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_camountActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField7ActionPerformed
+    }//GEN-LAST:event_camountActionPerformed
 
-    private void jTextField8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField8ActionPerformed
+    private void cdaysActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cdaysActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField8ActionPerformed
+    }//GEN-LAST:event_cdaysActionPerformed
 
-    private void jTextField9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField9ActionPerformed
+    private void cpriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cpriceActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField9ActionPerformed
+    }//GEN-LAST:event_cpriceActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
@@ -314,12 +340,186 @@ public class CustomerCheckOut extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+        String name = cname.getText();
+    String mob = cno.getText();
+    String email = cmail.getText();
+    String CheckOut = coutdate.getText();
+    String numdays = cdays.getText();
+    String total = camount.getText();
+    String roomno = croom.getText();
+    
+    String path = "C:\\Users\\dhana\\OneDrive\\Desktop\\Transcripts";
+    Document doc = new Document();
+    
+     try {
+        ConnectionProvider c = new ConnectionProvider();
+        
+        // Query to find customer by room number
+        String query = "SELECT * FROM customer WHERE roomno ='" + roomno + "' AND checkout IS NULL";
+        ResultSet rs = c.s.executeQuery(query);
+        
+        // Check if there's data in the result set
+        if (rs.next()) {
+            String id = rs.getString(1); // Get the ID from the result set
+            
+            // Update query
+            String updateQuery = "UPDATE customer SET numberofdays =" + numdays +
+                                 ", totalAmount = '" + total + 
+                                 "', checkOut = '" + CheckOut +
+                                 "' WHERE id = '" + id + "'";
+            c.s.executeUpdate(updateQuery);
+            
+            // Update room status
+            String roomUpdateQuery = "UPDATE rooms SET Status = 'Available' WHERE roomno = '" + roomno + "'";
+            c.s.executeUpdate(roomUpdateQuery);
+            
+            // Create PDF
+            PdfWriter.getInstance(doc, new FileOutputStream(path + "\\" + id + ".pdf"));
+            doc.open();
+            
+            // Add title and date
+            Paragraph title = new Paragraph("GuestVision Bill Receipt", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 24, BaseColor.BLUE));
+            title.setAlignment(Element.ALIGN_CENTER);
+            doc.add(title);
+            
+            doc.add(new Paragraph("Date: " + new SimpleDateFormat("yyyy/MM/dd").format(new Date()), FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.GRAY)));
+            doc.add(new Paragraph("\n"));
+            
+            // Customer Information
+            doc.add(new Paragraph("Customer Information", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.DARK_GRAY)));
+            doc.add(new Paragraph("Name: " + name, FontFactory.getFont(FontFactory.HELVETICA, 14)));
+            doc.add(new Paragraph("Mobile: " + mob, FontFactory.getFont(FontFactory.HELVETICA, 14)));
+            doc.add(new Paragraph("Email: " + email, FontFactory.getFont(FontFactory.HELVETICA, 14)));
+            doc.add(new Paragraph("Room No: " + roomno, FontFactory.getFont(FontFactory.HELVETICA, 14)));
+            doc.add(new Paragraph("\n"));
+
+            // Bill Details Table
+            doc.add(new Paragraph("Bill Details", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.DARK_GRAY)));
+
+            // Create a table with 3 columns
+            PdfPTable table = new PdfPTable(3);
+            table.setWidthPercentage(100); // Set table width to 100%
+            table.setSpacingBefore(10f); // Space before the table
+            table.setSpacingAfter(10f); // Space after the table
+
+            // Add table headers with background color
+            PdfPCell header1 = new PdfPCell(new Phrase("Description", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
+            header1.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            table.addCell(header1);
+            
+            PdfPCell header2 = new PdfPCell(new Phrase("Quantity", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
+            header2.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            table.addCell(header2);
+            
+            PdfPCell header3 = new PdfPCell(new Phrase("Amount", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
+            header3.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            table.addCell(header3);
+
+            // Add rows to the table
+            table.addCell(new Phrase("Number of Days", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            table.addCell(new Phrase(numdays, FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            table.addCell(new Phrase("$" + total, FontFactory.getFont(FontFactory.HELVETICA, 12)));
+
+            // Additional Charges Example
+            // table.addCell(new Phrase("Room Service", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            // table.addCell(new Phrase("1", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            // table.addCell(new Phrase("$10", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+
+            // Add the table to the document
+            doc.add(table);
+            
+            // Thank you note with different font style
+            doc.add(new Paragraph("Thank you for choosing our hotel!", FontFactory.getFont(FontFactory.HELVETICA_OBLIQUE, 14, BaseColor.DARK_GRAY)));
+            
+            // Closing the document
+            doc.close(); // Don't forget to close the document
+        } else {
+            JOptionPane.showMessageDialog(null, "No customer found with the specified room number.");
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, e);
+    }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        setVisible(false);
+        int a = JOptionPane.showConfirmDialog(null, "Do you really want to Exit?", "Select", JOptionPane.YES_NO_OPTION);
+        if (a == 0) {
+            setVisible(false);
+        }   
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        // TODO add your handling code here:
+        String query = "select * from customer where checkout is null";
+        DefaultTableModel model = (DefaultTableModel)jTable2.getModel();
+        model.setRowCount(0);
+        try {
+            ConnectionProvider c = new ConnectionProvider();
+            c.s.executeQuery(query);
+            ResultSet rs = c.s.executeQuery(query);
+
+            while (rs.next()) {
+                model.addRow(new Object[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8),rs.getString(9),rs.getString(10),rs.getString(11),rs.getString(12),rs.getString(13)});
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_formComponentShown
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+int room = Integer.parseInt(croom.getText());
+
+try {  
+    ConnectionProvider c = new ConnectionProvider();  
+    String query = "select * from customer where roomno ='" + room + "' and checkout is NULL";
+    ResultSet rs = c.s.executeQuery(query);
+    
+    if (rs.next()) {
+        croom.setEditable(false);
+        
+        // Retrieve and set the customer details
+        int id = rs.getInt(1);
+        cname.setText(rs.getString(2));
+        cdate.setText(rs.getString(9));  // Assuming this is the check-in date
+        cprice.setText(rs.getString(13));  // Set the price in the existing cprice field
+        cno.setText(rs.getString(3));
+        cmail.setText(rs.getString(6));
+        
+        // Set current date as the checkout date
+        SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar cal = Calendar.getInstance();
+        coutdate.setText(myFormat.format(cal.getTime()));
+        coutdate.setEditable(false); // Make the checkout date non-editable
+        
+        // Calculate the difference between check-in and current date (number of days)
+        String dateBeforeString = rs.getString(9);
+        java.util.Date dateBefore = myFormat.parse(dateBeforeString);
+        String dateAfterString = myFormat.format(cal.getTime());
+        java.util.Date dateAfter = myFormat.parse(dateAfterString);
+        long difference = dateAfter.getTime() - dateBefore.getTime();
+        int noofdays = (int) (difference / (1000 * 60 * 60 * 24));
+        
+        if (noofdays == 0) {
+            noofdays = 1;
+        }
+        
+        cdays.setText(String.valueOf(noofdays));
+        
+        // Calculate the total amount (number of days * price per day)
+        float price = Float.parseFloat(cprice.getText());  // Use the existing cprice field
+        camount.setText(String.valueOf(noofdays * price));  // Set the calculated amount
+        
+    } else {
+        JOptionPane.showMessageDialog(null,"Room Number is not Booked or Room Number Does Not Exist");
+    }
+} catch (Exception e) {
+    JOptionPane.showMessageDialog(null, e);
+}
+
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -359,6 +559,15 @@ public class CustomerCheckOut extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField camount;
+    private javax.swing.JTextField cdate;
+    private javax.swing.JTextField cdays;
+    private javax.swing.JTextField cmail;
+    private javax.swing.JTextField cname;
+    private javax.swing.JTextField cno;
+    private javax.swing.JTextField coutdate;
+    private javax.swing.JTextField cprice;
+    private javax.swing.JTextField croom;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -376,14 +585,5 @@ public class CustomerCheckOut extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
 }
