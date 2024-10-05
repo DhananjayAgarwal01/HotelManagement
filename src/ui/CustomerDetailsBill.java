@@ -9,7 +9,9 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -173,7 +175,7 @@ public class CustomerDetailsBill extends javax.swing.JFrame {
         model.setRowCount(0);
         try {
             ConnectionProvider c = new ConnectionProvider();
-            c.s.executeQuery(query);
+            System.out.println("Executing query: " + query); // Print the query
             ResultSet rs = c.s.executeQuery(query);
 
             while (rs.next()) {
@@ -188,6 +190,8 @@ public class CustomerDetailsBill extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         String date=coutdate.getText();
+        setVisible(false);
+        new CustomerDetailsBill().setVisible(true); 
         String query = "select * from customer where checkOUT is '"+date+"'";
         DefaultTableModel model = (DefaultTableModel)jTable2.getModel();
         model.setRowCount(0);
@@ -200,48 +204,40 @@ public class CustomerDetailsBill extends javax.swing.JFrame {
                 model.addRow(new Object[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8),rs.getString(9),rs.getString(10),rs.getString(11),rs.getString(12),rs.getString(13)});
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
-        }
+        } catch (Exception ex) {
+    JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+}
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
         // TODO add your handling code here:
-        int index=jTable2.getSelectedRow();
-        TableModel model=jTable2.getModel();
-        String id=model.getValueAt(index,0).toString();
-        String path = "C:\\Users\\dhana\\OneDrive\\Desktop\\Transcripts";
+ int index = jTable2.getSelectedRow();
+    TableModel model = jTable2.getModel();
+    String id = model.getValueAt(index, 0).toString();
+    String path = "C:\\Users\\dhana\\OneDrive\\Desktop\\Transcripts";
     Document doc = new Document();
     
-     try {
+    try {
         ConnectionProvider c = new ConnectionProvider();
         
-        // Query to find customer by room number
+        // Query to find customer by id
         String query = "SELECT * FROM customer WHERE id ='" + id + "'";
         ResultSet rs = c.s.executeQuery(query);
-        String name=rs.getString("2");
-        String roomno=rs.getString("12");
-        String total=rs.getString("17");
-        String numdays=rs.getString("16");
-        String CheckOut=rs.getString("15");
-        String mob=rs.getString("3");
-        String email=rs.getString("6");
         
-        // Check if there's data in the result set
-        if (rs.next()) {
-            // Update query
-            String updateQuery = "UPDATE customer SET numberofdays = numberofdays + " + numdays + 
-                                 ", totalAmount = '" + total + 
-                                 "', checkOut = '" + CheckOut + 
-                                 "' WHERE id = '" + id + "'";
-            c.s.executeUpdate(updateQuery);
-            
-            // Update room status
-            String roomUpdateQuery = "UPDATE rooms SET Status = 'Available' WHERE roomno = '" + roomno + "'";
-            c.s.executeUpdate(roomUpdateQuery);
+        if (rs.next()) { // Move this check before accessing rs
+            String name = rs.getString(2); // Change "2" to 2
+            String roomno = rs.getString(12); // Change "12" to 12
+            String total = rs.getString(17); // Change "17" to 17
+            String numdays = rs.getString(16); // Change "16" to 16
+            String CheckOut = rs.getString(15); // Change "15" to 15
+            String mob = rs.getString(3); // Change "3" to 3
+            String email = rs.getString(6); // Change "6" to 6
             
             // Create PDF
-            PdfWriter.getInstance(doc, new FileOutputStream(path + "\\" + id + ".pdf"));
+            PdfWriter.getInstance(doc, new FileOutputStream( path + "\\" + id + "_" + System.currentTimeMillis() + ".pdf"));
             doc.open();
             
             // Add title and date
@@ -258,6 +254,7 @@ public class CustomerDetailsBill extends javax.swing.JFrame {
             doc.add(new Paragraph("Mobile: " + mob, FontFactory.getFont(FontFactory.HELVETICA, 14)));
             doc.add(new Paragraph("Email: " + email, FontFactory.getFont(FontFactory.HELVETICA, 14)));
             doc.add(new Paragraph("Room No: " + roomno, FontFactory.getFont(FontFactory.HELVETICA, 14)));
+            doc.add(new Paragraph("Checked-Out on: " + CheckOut, FontFactory.getFont(FontFactory.HELVETICA, 14)));
             doc.add(new Paragraph("\n"));
 
             // Bill Details Table
@@ -287,11 +284,6 @@ public class CustomerDetailsBill extends javax.swing.JFrame {
             table.addCell(new Phrase(numdays, FontFactory.getFont(FontFactory.HELVETICA, 12)));
             table.addCell(new Phrase("$" + total, FontFactory.getFont(FontFactory.HELVETICA, 12)));
 
-            // Additional Charges Example
-            // table.addCell(new Phrase("Room Service", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            // table.addCell(new Phrase("1", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            // table.addCell(new Phrase("$10", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-
             // Add the table to the document
             doc.add(table);
             
@@ -300,8 +292,9 @@ public class CustomerDetailsBill extends javax.swing.JFrame {
             
             // Closing the document
             doc.close(); // Don't forget to close the document
+            JOptionPane.showMessageDialog(null, "Bill Created Successfully at Transcripts");
         } else {
-            JOptionPane.showMessageDialog(null, "No customer found with the specified room number.");
+            JOptionPane.showMessageDialog(null, "No customer found with the specified ID.");
         }
     } catch (Exception e) {
         JOptionPane.showMessageDialog(null, e);

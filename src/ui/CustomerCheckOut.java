@@ -1,6 +1,7 @@
 package ui;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Paragraph;
@@ -8,9 +9,12 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.HeadlessException;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -340,35 +344,38 @@ public class CustomerCheckOut extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        String name = cname.getText();
+ String name = cname.getText();
     String mob = cno.getText();
     String email = cmail.getText();
     String CheckOut = coutdate.getText();
     String numdays = cdays.getText();
     String total = camount.getText();
     String roomno = croom.getText();
-    
+
     String path = "C:\\Users\\dhana\\OneDrive\\Desktop\\Transcripts";
     Document doc = new Document();
     
-     try {
+    try {
         ConnectionProvider c = new ConnectionProvider();
         
         // Query to find customer by room number
         String query = "SELECT * FROM customer WHERE roomno ='" + roomno + "' AND checkout IS NULL";
         ResultSet rs = c.s.executeQuery(query);
         
-        // Check if there's data in the result set
+        // Check if customer exists
         if (rs.next()) {
             String id = rs.getString(1); // Get the ID from the result set
             
-            // Update query
-            String updateQuery = "UPDATE customer SET numberofdays =" + numdays +
+            // Update the customer table with the new data
+            String updateQuery = "UPDATE customer SET numberofdays = " + numdays + 
                                  ", totalAmount = '" + total + 
-                                 ", Status = 'Checked-Out'" + 
-                                 "', checkOut = '" + CheckOut +
+                                 "', Status = 'Checked-Out'" + 
+                                 ", checkOut = '" + CheckOut + 
                                  "' WHERE id = '" + id + "'";
-            String updateQuery2 = "UPDATE signup SET status='Checked-Out' where name='"+name+"'";
+            
+            // Update the signup table
+            String updateQuery2 = "UPDATE signup SET status='Checked-Out' WHERE name='" + name + "'";
+            
             c.s.executeUpdate(updateQuery);
             c.s.executeUpdate(updateQuery2);
             
@@ -376,18 +383,21 @@ public class CustomerCheckOut extends javax.swing.JFrame {
             String roomUpdateQuery = "UPDATE rooms SET Status = 'Available' WHERE roomno = '" + roomno + "'";
             c.s.executeUpdate(roomUpdateQuery);
             
-            // Create PDF
+            // Create the PDF receipt
             PdfWriter.getInstance(doc, new FileOutputStream(path + "\\" + id + ".pdf"));
             doc.open();
             
-            // Add title and date
-            Paragraph title = new Paragraph("GuestVision Bill Receipt", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 24, BaseColor.BLUE));
+            // Add title
+            Paragraph title = new Paragraph("GuestVision Bill Receipt", 
+                                            FontFactory.getFont(FontFactory.HELVETICA_BOLD, 24, BaseColor.BLUE));
             title.setAlignment(Element.ALIGN_CENTER);
             doc.add(title);
             
-            doc.add(new Paragraph("Date: " + new SimpleDateFormat("yyyy/MM/dd").format(new Date()), FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.GRAY)));
+            // Add date
+            doc.add(new Paragraph("Date: " + new SimpleDateFormat("yyyy/MM/dd").format(new Date()), 
+                                  FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.GRAY)));
             doc.add(new Paragraph("\n"));
-            
+
             // Customer Information
             doc.add(new Paragraph("Customer Information", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.DARK_GRAY)));
             doc.add(new Paragraph("Name: " + name, FontFactory.getFont(FontFactory.HELVETICA, 14)));
@@ -395,17 +405,17 @@ public class CustomerCheckOut extends javax.swing.JFrame {
             doc.add(new Paragraph("Email: " + email, FontFactory.getFont(FontFactory.HELVETICA, 14)));
             doc.add(new Paragraph("Room No: " + roomno, FontFactory.getFont(FontFactory.HELVETICA, 14)));
             doc.add(new Paragraph("\n"));
-
-            // Bill Details Table
+            
+            // Bill Details
             doc.add(new Paragraph("Bill Details", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.DARK_GRAY)));
-
-            // Create a table with 3 columns
+            
+            // Create the bill details table
             PdfPTable table = new PdfPTable(3);
-            table.setWidthPercentage(100); // Set table width to 100%
-            table.setSpacingBefore(10f); // Space before the table
-            table.setSpacingAfter(10f); // Space after the table
+            table.setWidthPercentage(100); 
+            table.setSpacingBefore(10f); 
+            table.setSpacingAfter(10f);
 
-            // Add table headers with background color
+            // Add table headers
             PdfPCell header1 = new PdfPCell(new Phrase("Description", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
             header1.setBackgroundColor(BaseColor.LIGHT_GRAY);
             table.addCell(header1);
@@ -418,29 +428,30 @@ public class CustomerCheckOut extends javax.swing.JFrame {
             header3.setBackgroundColor(BaseColor.LIGHT_GRAY);
             table.addCell(header3);
 
-            // Add rows to the table
+            // Add table content
             table.addCell(new Phrase("Number of Days", FontFactory.getFont(FontFactory.HELVETICA, 12)));
             table.addCell(new Phrase(numdays, FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            table.addCell(new Phrase("$" + total, FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            table.addCell(new Phrase("Rs." + total, FontFactory.getFont(FontFactory.HELVETICA, 12)));
 
-            // Additional Charges Example
-            // table.addCell(new Phrase("Room Service", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            // table.addCell(new Phrase("1", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            // table.addCell(new Phrase("$10", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-
-            // Add the table to the document
+            // Add table to document
             doc.add(table);
             
-            // Thank you note with different font style
+            // Thank you note
             doc.add(new Paragraph("Thank you for choosing our hotel!", FontFactory.getFont(FontFactory.HELVETICA_OBLIQUE, 14, BaseColor.DARK_GRAY)));
             
-            // Closing the document
-            doc.close(); // Don't forget to close the document
+            // Close document
+            doc.close();
+            
+            JOptionPane.showMessageDialog(null, "Customer Checked Out successfully. Please check transcripts for the bill.");
+            setVisible(false);
+            new CustomerCheckOut().setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "No customer found with the specified room number.");
         }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, e);
+    } catch (DocumentException | HeadlessException | FileNotFoundException | SQLException e) {
+        // Show detailed error
+        JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+        e.printStackTrace(); // Print stack trace for debugging
     }
     }//GEN-LAST:event_jButton4ActionPerformed
 

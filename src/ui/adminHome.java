@@ -198,6 +198,12 @@ public class adminHome extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
+        int a = JOptionPane.showConfirmDialog(null, "Do you really want to log-out?","Select", JOptionPane.YES_NO_OPTION);
+        if(a==0){
+        setVisible(false);
+        new AdminLogin().setVisible(true);
+        JOptionPane.showMessageDialog(null, "Logged out successfully.");
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed

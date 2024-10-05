@@ -1,4 +1,6 @@
 package ui;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.sql.ResultSet;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -58,12 +60,10 @@ SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         cbed = new javax.swing.JComboBox<>();
-        jLabel12 = new javax.swing.JLabel();
         croomno = new javax.swing.JTextField();
         caddress = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
         allot = new javax.swing.JButton();
-        cprice = new javax.swing.JTextField();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
@@ -200,13 +200,6 @@ SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
         });
         getContentPane().add(cbed, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 220, 300, -1));
 
-        jLabel12.setBackground(new java.awt.Color(105, 0, 0));
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setText("Price");
-        jLabel12.setOpaque(true);
-        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 420, 150, -1));
-
         croomno.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         getContentPane().add(croomno, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 380, 300, -1));
 
@@ -234,9 +227,6 @@ SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
             }
         });
         getContentPane().add(allot, new org.netbeans.lib.awtextra.AbsoluteConstraints(1043, 503, -1, -1));
-
-        cprice.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        getContentPane().add(cprice, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 450, 300, -1));
 
         jButton5.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
         jButton5.setForeground(new java.awt.Color(153, 0, 0));
@@ -304,42 +294,66 @@ SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     private void allotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allotActionPerformed
         // TODO add your handling code here:
-        String name = cname.getText();
+String name = cname.getText();
 String mob = cno.getText();
 String nat = cnat.getText();
-String gender = (String)cgender.getSelectedItem();
+String gender = (String) cgender.getSelectedItem();
 String email = cemail.getText();
 String idProof = cid.getText();
 String Address = caddress.getText();
 String checkIN = cindate.getText();
-String bed = (String)cbed.getSelectedItem();
-String roomType = (String)croom.getSelectedItem();
+String bed = (String) cbed.getSelectedItem();
+String roomType = (String) croom.getSelectedItem();
 String roomNo = croomno.getText();
-String price = cprice.getText();
-String Query = "Select max(id) from customer";
+
+// Query to get the room details (price and status) based on room number
+String roomQuery = "SELECT price, status FROM rooms WHERE roomno = ?";
+String Query = "SELECT MAX(id) FROM customer";
 
 try {
     ConnectionProvider c = new ConnectionProvider();
-    ResultSet rs = c.s.executeQuery(Query);
-    int id = 1; // Default id in case the table is empty
-    if(rs.next()) {
-        id = rs.getInt(1) + 1; // Increment the max id
+
+    // Fetching the price and status from the rooms table
+    PreparedStatement roomStmt = c.c.prepareStatement(roomQuery);
+    roomStmt.setString(1, roomNo);
+    ResultSet roomRs = roomStmt.executeQuery();
+
+    // Check if the room exists in the rooms table
+    String price = "";
+    String status = "";
+
+    // Only proceed if roomRs has results
+    if (roomRs.next()) {
+        price = roomRs.getString(1); // Assuming price is in the first column (index 0)
+        status = roomRs.getString(2); // Assuming status is in the second column (index 1)
+
+        // Check if the room is booked
+        if ("Booked".equalsIgnoreCase(status)) {
+            JOptionPane.showMessageDialog(null, "Room is already booked! Please select another room.");
+            return; // Stop execution if the room is booked
+        }
+    } else {
+        JOptionPane.showMessageDialog(null, "Room does not exist! Please check the room number.");
+        return; // Stop execution if the room does not exist
     }
-    
-    // Update room status to 'Booked'
-    if(!price.equals("")) {
+
+    // Proceed only if the price is found
+    if (price != null && !price.isEmpty()) {
+        ResultSet rs = c.s.executeQuery(Query);
+        int id = 1; // Default id in case the table is empty
+        if (rs.next()) {
+            id = rs.getInt(1) + 1; // Increment the max id
+        }
+
+        // Update room status to 'Checked-IN'
         Query = "UPDATE rooms SET status='Checked-IN' WHERE roomno=?";
         PreparedStatement ps1 = c.c.prepareStatement(Query);
         ps1.setString(1, roomNo); // Set room number in the query
         int rowsAffected = ps1.executeUpdate();
-        Query = "UPDATE rooms SET status='Checked-IN and roomno=? where name='"+name+"'";
-        PreparedStatement psx = c.c.prepareStatement(Query);
-        psx.setString(6, roomNo); // Set room number in the query
-        int rowsAffectedx = psx.executeUpdate();
-        
+
         // Insert customer data into the customer table
         Query = "INSERT INTO customer (id, name, mobile, nationality, gender, email, ID_Proof, address, checkin, roomno, bed, roomtype, price, status) "
-              + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps2 = c.c.prepareStatement(Query);
         ps2.setInt(1, id); // Set id
         ps2.setString(2, name);
@@ -353,18 +367,22 @@ try {
         ps2.setString(10, roomNo);
         ps2.setString(11, bed);
         ps2.setString(12, roomType);
-        ps2.setString(13, price);
+        ps2.setString(13, price); // Use the price retrieved from the rooms table
         ps2.setString(14, "Staying");
-        
+
         int rowsInserted = ps2.executeUpdate();
-        
-        if(rowsInserted > 0) {
+
+        if (rowsInserted > 0) {
             JOptionPane.showMessageDialog(null, "Customer details inserted successfully!");
             setVisible(false);
-            new CustomerCheckIn().setVisible(true); 
+            new CustomerCheckIn().setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Error inserting customer details.");
         }
+    } else {
+        JOptionPane.showMessageDialog(null, "Room price not found for room number: " + roomNo);
     }
-} catch(Exception e) {
+} catch (Exception e) {
     JOptionPane.showMessageDialog(null, e);
 }
 
@@ -418,7 +436,6 @@ try {
     private javax.swing.JTextField cname;
     private javax.swing.JTextField cnat;
     private javax.swing.JTextField cno;
-    private javax.swing.JTextField cprice;
     private javax.swing.JComboBox<String> croom;
     private javax.swing.JTextField croomno;
     private javax.swing.JButton jButton3;
@@ -427,7 +444,6 @@ try {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
