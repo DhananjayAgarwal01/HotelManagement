@@ -170,7 +170,7 @@ public class CustomerDetailsBill extends javax.swing.JFrame {
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // TODO add your handling code here:
-        String query = "select * from customer";
+        String query = "select * from customer where status = 'Checked-Out'";
         DefaultTableModel model = (DefaultTableModel)jTable2.getModel();
         model.setRowCount(0);
         try {
@@ -282,7 +282,7 @@ public class CustomerDetailsBill extends javax.swing.JFrame {
             // Add rows to the table
             table.addCell(new Phrase("Number of Days", FontFactory.getFont(FontFactory.HELVETICA, 12)));
             table.addCell(new Phrase(numdays, FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            table.addCell(new Phrase("$" + total, FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            table.addCell(new Phrase("Rs. " + total, FontFactory.getFont(FontFactory.HELVETICA, 12)));
 
             // Add the table to the document
             doc.add(table);

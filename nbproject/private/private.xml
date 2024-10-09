@@ -5,7 +5,11 @@
         <group>
             <file>file:/C:/Users/dhana/OneDrive/Documents/NetBeansProjects/HotelManagement2/src/ui/ConnectionProvider.java</file>
             <file>file:/C:/Users/dhana/OneDrive/Documents/NetBeansProjects/HotelManagement2/src/ui/CustomerCheckOut.java</file>
+            <file>file:/C:/Users/dhana/OneDrive/Documents/NetBeansProjects/HotelManagement2/src/ui/manage_room.java</file>
+            <file>file:/C:/Users/dhana/OneDrive/Documents/NetBeansProjects/HotelManagement2/src/ui/forgotPassword.java</file>
             <file>file:/C:/Users/dhana/OneDrive/Documents/NetBeansProjects/HotelManagement2/src/ui/adminHome.java</file>
+            <file>file:/C:/Users/dhana/OneDrive/Documents/NetBeansProjects/HotelManagement2/src/ui/CustomerCheckIn.java</file>
+            <file>file:/C:/Users/dhana/OneDrive/Documents/NetBeansProjects/HotelManagement2/src/ui/CustomerDetailsBill.java</file>
         </group>
     </open-files>
 </project-private>
