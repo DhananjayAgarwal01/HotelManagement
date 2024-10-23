@@ -183,6 +183,8 @@ try {
     } else {
         JOptionPane.showMessageDialog(null, "Data Not Found! Cannot change password.");
     }
+    this.setVisible(false);
+    new forgotPassword().setVisible(true);
     
 } catch (Exception e) {
     e.printStackTrace();

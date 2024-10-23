@@ -1,6 +1,7 @@
 package ui;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Paragraph;
@@ -8,6 +9,8 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.HeadlessException;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -190,9 +193,7 @@ public class CustomerDetailsBill extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         String date=coutdate.getText();
-        setVisible(false);
-        new CustomerDetailsBill().setVisible(true); 
-        String query = "select * from customer where checkOUT is '"+date+"'";
+        String query = "select * from customer where checkOUT Like '"+date+"'";
         DefaultTableModel model = (DefaultTableModel)jTable2.getModel();
         model.setRowCount(0);
         try {
@@ -235,70 +236,100 @@ public class CustomerDetailsBill extends javax.swing.JFrame {
             String CheckOut = rs.getString(15); // Change "15" to 15
             String mob = rs.getString(3); // Change "3" to 3
             String email = rs.getString(6); // Change "6" to 6
+            Float roomCharge = Float.parseFloat(total) * Float.parseFloat(numdays);
+        double tax = roomCharge * 0.12; // 12% tax
+        double grandTotal = roomCharge + tax; // Total amount after tax
             
             // Create PDF
             PdfWriter.getInstance(doc, new FileOutputStream( path + "\\" + id + "_" + System.currentTimeMillis() + ".pdf"));
             doc.open();
             
             // Add title and date
-            Paragraph title = new Paragraph("GuestVision Bill Receipt", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 24, BaseColor.BLUE));
-            title.setAlignment(Element.ALIGN_CENTER);
-            doc.add(title);
-            
-            doc.add(new Paragraph("Date: " + new SimpleDateFormat("yyyy/MM/dd").format(new Date()), FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.GRAY)));
-            doc.add(new Paragraph("\n"));
-            
-            // Customer Information
-            doc.add(new Paragraph("Customer Information", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.DARK_GRAY)));
-            doc.add(new Paragraph("Name: " + name, FontFactory.getFont(FontFactory.HELVETICA, 14)));
-            doc.add(new Paragraph("Mobile: " + mob, FontFactory.getFont(FontFactory.HELVETICA, 14)));
-            doc.add(new Paragraph("Email: " + email, FontFactory.getFont(FontFactory.HELVETICA, 14)));
-            doc.add(new Paragraph("Room No: " + roomno, FontFactory.getFont(FontFactory.HELVETICA, 14)));
-            doc.add(new Paragraph("Checked-Out on: " + CheckOut, FontFactory.getFont(FontFactory.HELVETICA, 14)));
-            doc.add(new Paragraph("\n"));
+           Paragraph title = new Paragraph("GuestVision Bill Receipt", 
+                                        FontFactory.getFont(FontFactory.HELVETICA_BOLD, 24, BaseColor.BLUE));
+        title.setAlignment(Element.ALIGN_CENTER);
+        doc.add(title);
+        
+        // Add date
+        doc.add(new Paragraph("Date: " + new SimpleDateFormat("yyyy/MM/dd").format(new Date()), 
+                              FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.GRAY)));
+        doc.add(new Paragraph("\n"));
 
-            // Bill Details Table
-            doc.add(new Paragraph("Bill Details", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.DARK_GRAY)));
+        // Customer Information
+        doc.add(new Paragraph("Customer Information", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.DARK_GRAY)));
+        doc.add(new Paragraph("Name: " + name, FontFactory.getFont(FontFactory.HELVETICA, 14)));
+        doc.add(new Paragraph("Mobile: " + mob, FontFactory.getFont(FontFactory.HELVETICA, 14)));
+        doc.add(new Paragraph("Email: " + email, FontFactory.getFont(FontFactory.HELVETICA, 14)));
+        doc.add(new Paragraph("Room No: " + roomno, FontFactory.getFont(FontFactory.HELVETICA, 14)));
+        doc.add(new Paragraph("Check-Out Date: " + CheckOut, FontFactory.getFont(FontFactory.HELVETICA, 14)));
+        doc.add(new Paragraph("\n"));
+        
+        // Bill Details Section
+        doc.add(new Paragraph("Bill Details", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.DARK_GRAY)));
+        
+        // Create the bill details table
+        PdfPTable table = new PdfPTable(3); // 3 columns
+        table.setWidthPercentage(100); 
+        table.setSpacingBefore(10f); 
+        table.setSpacingAfter(10f);
 
-            // Create a table with 3 columns
-            PdfPTable table = new PdfPTable(3);
-            table.setWidthPercentage(100); // Set table width to 100%
-            table.setSpacingBefore(10f); // Space before the table
-            table.setSpacingAfter(10f); // Space after the table
+        // Add table headers
+        PdfPCell header1 = new PdfPCell(new Phrase("Description", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
+        header1.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(header1);
+        
+        PdfPCell header2 = new PdfPCell(new Phrase("Quantity", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
+        header2.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(header2);
+        
+        PdfPCell header3 = new PdfPCell(new Phrase("Amount (Rs)", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
+        header3.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(header3);
 
-            // Add table headers with background color
-            PdfPCell header1 = new PdfPCell(new Phrase("Description", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
-            header1.setBackgroundColor(BaseColor.LIGHT_GRAY);
-            table.addCell(header1);
-            
-            PdfPCell header2 = new PdfPCell(new Phrase("Quantity", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
-            header2.setBackgroundColor(BaseColor.LIGHT_GRAY);
-            table.addCell(header2);
-            
-            PdfPCell header3 = new PdfPCell(new Phrase("Amount", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
-            header3.setBackgroundColor(BaseColor.LIGHT_GRAY);
-            table.addCell(header3);
+        // Add table content
+        table.addCell(new Phrase("Room Charge per day", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        table.addCell(new Phrase("1", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        table.addCell(new Phrase("Rs." + total, FontFactory.getFont(FontFactory.HELVETICA, 12)));
 
-            // Add rows to the table
-            table.addCell(new Phrase("Number of Days", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            table.addCell(new Phrase(numdays, FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            table.addCell(new Phrase("Rs. " + total, FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        // Add room cost
+        table.addCell(new Phrase("Room Charge", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        table.addCell(new Phrase(numdays, FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        table.addCell(new Phrase("Rs." + roomCharge, FontFactory.getFont(FontFactory.HELVETICA, 12)));
 
-            // Add the table to the document
-            doc.add(table);
-            
-            // Thank you note with different font style
-            doc.add(new Paragraph("Thank you for choosing our hotel!", FontFactory.getFont(FontFactory.HELVETICA_OBLIQUE, 14, BaseColor.DARK_GRAY)));
-            
-            // Closing the document
-            doc.close(); // Don't forget to close the document
-            JOptionPane.showMessageDialog(null, "Bill Created Successfully at Transcripts");
-        } else {
-            JOptionPane.showMessageDialog(null, "No customer found with the specified ID.");
-        }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, e);
+        // Add taxes (12% tax)
+        table.addCell(new Phrase("Tax (12%)", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        table.addCell(new Phrase("1", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        table.addCell(new Phrase("Rs." + String.format("%.2f", tax), FontFactory.getFont(FontFactory.HELVETICA, 12)));
+
+        // Add total amount after tax
+        table.addCell(new Phrase("Total Amount After Tax", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
+        table.addCell(new Phrase("", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14))); // Empty for alignment
+        table.addCell(new Phrase("Rs." + String.format("%.2f", grandTotal), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
+
+        // Add table to document
+        doc.add(table);
+        
+        // Footer with thank you note and contact information
+        doc.add(new Paragraph("Thank you for choosing our hotel!", FontFactory.getFont(FontFactory.HELVETICA_OBLIQUE, 14, BaseColor.DARK_GRAY)));
+        doc.add(new Paragraph("For any inquiries, please contact: support@guestvision.com", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        doc.add(new Paragraph("\n\nTerms and Conditions:"));
+        doc.add(new Paragraph("1. All payments are final and non-refundable.", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        doc.add(new Paragraph("2. Checkout time is 11:00 AM.", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        
+        // Close document
+        doc.close();
+        
+        JOptionPane.showMessageDialog(null, "Customer Checked Out successfully. Please check transcripts for the bill.");
+        setVisible(false);
+        new CustomerCheckOut().setVisible(true);
+    } else {
+        JOptionPane.showMessageDialog(null, "No customer found with the specified room number.");
     }
+} catch (DocumentException | HeadlessException | FileNotFoundException | SQLException e) {
+    // Show detailed error
+    JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+    e.printStackTrace(); // Print stack trace for debugging
+}
     }//GEN-LAST:event_jTable2MouseClicked
 
     /**

@@ -351,6 +351,9 @@ public class CustomerCheckOut extends javax.swing.JFrame {
     String numdays = cdays.getText();
     String total = camount.getText();
     String roomno = croom.getText();
+    Float roomCharge = Float.parseFloat(total) * Float.parseFloat(numdays);
+        double tax = roomCharge * 0.12; // 12% tax
+        double grandTotal = roomCharge + tax; // Total amount after tax
 
     String path = "C:\\Users\\dhana\\OneDrive\\Desktop\\Transcripts";
     Document doc = new Document();
@@ -385,74 +388,94 @@ public class CustomerCheckOut extends javax.swing.JFrame {
             
             // Create the PDF receipt
             PdfWriter.getInstance(doc, new FileOutputStream(path + "\\" + id + ".pdf"));
-            doc.open();
-            
-            // Add title
-            Paragraph title = new Paragraph("GuestVision Bill Receipt", 
-                                            FontFactory.getFont(FontFactory.HELVETICA_BOLD, 24, BaseColor.BLUE));
-            title.setAlignment(Element.ALIGN_CENTER);
-            doc.add(title);
-            
-            // Add date
-            doc.add(new Paragraph("Date: " + new SimpleDateFormat("yyyy/MM/dd").format(new Date()), 
-                                  FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.GRAY)));
-            doc.add(new Paragraph("\n"));
+        doc.open();
+        
+        // Add title
+        Paragraph title = new Paragraph("GuestVision Bill Receipt", 
+                                        FontFactory.getFont(FontFactory.HELVETICA_BOLD, 24, BaseColor.BLUE));
+        title.setAlignment(Element.ALIGN_CENTER);
+        doc.add(title);
+        
+        // Add date
+        doc.add(new Paragraph("Date: " + new SimpleDateFormat("yyyy/MM/dd").format(new Date()), 
+                              FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.GRAY)));
+        doc.add(new Paragraph("\n"));
 
-            // Customer Information
-            doc.add(new Paragraph("Customer Information", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.DARK_GRAY)));
-            doc.add(new Paragraph("Name: " + name, FontFactory.getFont(FontFactory.HELVETICA, 14)));
-            doc.add(new Paragraph("Mobile: " + mob, FontFactory.getFont(FontFactory.HELVETICA, 14)));
-            doc.add(new Paragraph("Email: " + email, FontFactory.getFont(FontFactory.HELVETICA, 14)));
-            doc.add(new Paragraph("Room No: " + roomno, FontFactory.getFont(FontFactory.HELVETICA, 14)));
-            doc.add(new Paragraph("\n"));
-            
-            // Bill Details
-            doc.add(new Paragraph("Bill Details", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.DARK_GRAY)));
-            
-            // Create the bill details table
-            PdfPTable table = new PdfPTable(3);
-            table.setWidthPercentage(100); 
-            table.setSpacingBefore(10f); 
-            table.setSpacingAfter(10f);
+        // Customer Information
+        doc.add(new Paragraph("Customer Information", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.DARK_GRAY)));
+        doc.add(new Paragraph("Name: " + name, FontFactory.getFont(FontFactory.HELVETICA, 14)));
+        doc.add(new Paragraph("Mobile: " + mob, FontFactory.getFont(FontFactory.HELVETICA, 14)));
+        doc.add(new Paragraph("Email: " + email, FontFactory.getFont(FontFactory.HELVETICA, 14)));
+        doc.add(new Paragraph("Room No: " + roomno, FontFactory.getFont(FontFactory.HELVETICA, 14)));
+        doc.add(new Paragraph("Check-Out Date: " + CheckOut, FontFactory.getFont(FontFactory.HELVETICA, 14)));
+        doc.add(new Paragraph("\n"));
+        
+        // Bill Details Section
+        doc.add(new Paragraph("Bill Details", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.DARK_GRAY)));
+        
+        // Create the bill details table
+        PdfPTable table = new PdfPTable(3); // 3 columns
+        table.setWidthPercentage(100); 
+        table.setSpacingBefore(10f); 
+        table.setSpacingAfter(10f);
 
-            // Add table headers
-            PdfPCell header1 = new PdfPCell(new Phrase("Description", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
-            header1.setBackgroundColor(BaseColor.LIGHT_GRAY);
-            table.addCell(header1);
-            
-            PdfPCell header2 = new PdfPCell(new Phrase("Quantity", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
-            header2.setBackgroundColor(BaseColor.LIGHT_GRAY);
-            table.addCell(header2);
-            
-            PdfPCell header3 = new PdfPCell(new Phrase("Amount", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
-            header3.setBackgroundColor(BaseColor.LIGHT_GRAY);
-            table.addCell(header3);
+        // Add table headers
+        PdfPCell header1 = new PdfPCell(new Phrase("Description", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
+        header1.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(header1);
+        
+        PdfPCell header2 = new PdfPCell(new Phrase("Quantity", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
+        header2.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(header2);
+        
+        PdfPCell header3 = new PdfPCell(new Phrase("Amount (Rs)", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
+        header3.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(header3);
 
-            // Add table content
-            table.addCell(new Phrase("Number of Days", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            table.addCell(new Phrase(numdays, FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            table.addCell(new Phrase("Rs." + total, FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        // Add table content
+        table.addCell(new Phrase("Room Charge per day", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        table.addCell(new Phrase("1", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        table.addCell(new Phrase("Rs." + total, FontFactory.getFont(FontFactory.HELVETICA, 12)));
 
-            // Add table to document
-            doc.add(table);
-            
-            // Thank you note
-            doc.add(new Paragraph("Thank you for choosing our hotel!", FontFactory.getFont(FontFactory.HELVETICA_OBLIQUE, 14, BaseColor.DARK_GRAY)));
-            
-            // Close document
-            doc.close();
-            
-            JOptionPane.showMessageDialog(null, "Customer Checked Out successfully. Please check transcripts for the bill.");
-            setVisible(false);
-            new CustomerCheckOut().setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "No customer found with the specified room number.");
-        }
-    } catch (DocumentException | HeadlessException | FileNotFoundException | SQLException e) {
-        // Show detailed error
-        JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
-        e.printStackTrace(); // Print stack trace for debugging
+        // Add room cost
+        table.addCell(new Phrase("Room Charge", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        table.addCell(new Phrase(numdays, FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        table.addCell(new Phrase("Rs." + roomCharge, FontFactory.getFont(FontFactory.HELVETICA, 12)));
+
+        // Add taxes (12% tax)
+        table.addCell(new Phrase("Tax (12%)", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        table.addCell(new Phrase("1", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        table.addCell(new Phrase("Rs." + String.format("%.2f", tax), FontFactory.getFont(FontFactory.HELVETICA, 12)));
+
+        // Add total amount after tax
+        table.addCell(new Phrase("Total Amount After Tax", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
+        table.addCell(new Phrase("", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14))); // Empty for alignment
+        table.addCell(new Phrase("Rs." + String.format("%.2f", grandTotal), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
+
+        // Add table to document
+        doc.add(table);
+        
+        // Footer with thank you note and contact information
+        doc.add(new Paragraph("Thank you for choosing our hotel!", FontFactory.getFont(FontFactory.HELVETICA_OBLIQUE, 14, BaseColor.DARK_GRAY)));
+        doc.add(new Paragraph("For any inquiries, please contact: support@guestvision.com", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        doc.add(new Paragraph("\n\nTerms and Conditions:"));
+        doc.add(new Paragraph("1. All payments are final and non-refundable.", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        doc.add(new Paragraph("2. Checkout time is 11:00 AM.", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        
+        // Close document
+        doc.close();
+        
+        JOptionPane.showMessageDialog(null, "Customer Checked Out successfully. Please check transcripts for the bill.");
+        setVisible(false);
+        new CustomerCheckOut().setVisible(true);
+    } else {
+        JOptionPane.showMessageDialog(null, "No customer found with the specified room number.");
     }
+} catch (DocumentException | HeadlessException | FileNotFoundException | SQLException e) {
+    // Show detailed error
+    JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+    e.printStackTrace(); // Print stack trace for debugging
+}
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -523,8 +546,10 @@ try {
         cdays.setText(String.valueOf(noofdays));
         
         // Calculate the total amount (number of days * price per day)
-        float price = Float.parseFloat(cprice.getText());  // Use the existing cprice field
-        camount.setText(String.valueOf(noofdays * price));  // Set the calculated amount
+        Float roomCharge = Float.valueOf(cprice.getText()) * Float.valueOf(noofdays);
+        double tax = roomCharge * 0.12; // 12% tax
+        double grandTotal = roomCharge + tax; // Total amount after tax
+        camount.setText(String.valueOf(grandTotal));  // Set the calculated amount
         
     } else {
         JOptionPane.showMessageDialog(null,"Room Number is not Booked or Room Number Does Not Exist");

@@ -118,7 +118,7 @@ public class adminHome extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Name", "Email", "Password", "Security Question", "Answer", "Room Number", "Status"
+                "Name", "Mobile", "Email", "Gender", "Check-IN", "Room Number", "Status"
             }
         ) {
             Class[] types = new Class [] {
@@ -219,7 +219,7 @@ public class adminHome extends javax.swing.JFrame {
         if(evt.getSource()==ahsearch){
 
             String name=ahname.getText();
-            String query = "select * from signup where name like '%"+name+"%'";
+            String query = "select * from customer where name like '%"+name+"%'";
             DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
             model.setRowCount(0);
 try {
@@ -250,7 +250,7 @@ try {
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // TODO add your handling code here:
-        String query = "select * from signup";
+        String query = "select * from customer";
             DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
             model.setRowCount(0);
 try {
@@ -259,7 +259,7 @@ try {
                 ResultSet rs = c.s.executeQuery(query);
     
     while (rs.next()) {
-        model.addRow(new Object[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7)});
+        model.addRow(new Object[]{rs.getString(2),rs.getString(3),rs.getString(6),rs.getString(5),rs.getString(9),rs.getString(12),rs.getString(14)});
     }
     
 } catch (Exception e) {

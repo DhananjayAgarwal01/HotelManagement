@@ -307,7 +307,7 @@ String roomType = (String) croom.getSelectedItem();
 String roomNo = croomno.getText();
 
 // Query to get the room details (price and status) based on room number
-String roomQuery = "SELECT price, status FROM rooms WHERE roomno = ?";
+String roomQuery = "SELECT price, status, room_type FROM rooms WHERE roomno = ?";
 String Query = "SELECT MAX(id) FROM customer";
 
 try {
@@ -321,11 +321,13 @@ try {
     // Check if the room exists in the rooms table
     String price = "";
     String status = "";
+    String type = "";
 
     // Only proceed if roomRs has results
     if (roomRs.next()) {
         price = roomRs.getString(1); // Assuming price is in the first column (index 0)
-        status = roomRs.getString(2); // Assuming status is in the second column (index 1)
+        status = roomRs.getString(2);
+        type = roomRs.getString(3);// Assuming status is in the second column (index 1)
 
         // Check if the room is booked
         if ("Booked".equalsIgnoreCase(status)) {
@@ -366,7 +368,7 @@ try {
         ps2.setString(9, checkIN);
         ps2.setString(10, roomNo);
         ps2.setString(11, bed);
-        ps2.setString(12, roomType);
+        ps2.setString(12, type);
         ps2.setString(13, price); // Use the price retrieved from the rooms table
         ps2.setString(14, "Staying");
 
@@ -374,8 +376,8 @@ try {
 
         if (rowsInserted > 0) {
             JOptionPane.showMessageDialog(null, "Customer details inserted successfully!");
-            setVisible(false);
-            new CustomerCheckIn().setVisible(true);
+//            setVisible(false);
+//            new CustomerCheckIn().setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Error inserting customer details.");
         }
